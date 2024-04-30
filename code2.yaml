@@ -1,0 +1,42 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: true
+  tasks:
+    - name: install passwd package
+      apt:
+        name: passwd
+        state: present
+      when: ansible_distribution in "Debian, Ubuntu"
+      tags:
+        - app1
+    - name: create group
+      group:
+        name: cloudteam
+        state: present
+#      when: ansible_distribution_major_version < 9
+    - name : create user
+      user:
+        name: raswondi
+        comment: Wondi Admin
+        group: cloudteam
+
+
+- hosts: databaseservers
+  become: yes
+  tasks: 
+    - name: install apache
+      apt: 
+        name: apache2
+        state: present
+    - name: start apache service
+      service: name=apache2 state=started enabled=yes
+      tags:
+        - service
+
+    - name: Copy index file
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+        

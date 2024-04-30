@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: false
+  #ignore_errors: true
+  tasks:
+  - name: check the date
+    command: datekssk
+    ignore_errors: yes
+  - name: check uptime
+    command: uptime
+  - name: check directory path
+    command: pwd
